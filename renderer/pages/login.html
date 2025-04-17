@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Palm Scanner</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .card {
+            background: #fff;
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            transition: all 0.3s ease;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 10px 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.2s ease;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #45a049;
+        }
+
+        #preview {
+            margin-top: 20px;
+            max-width: 100%;
+            border-radius: 8px;
+            border: 2px solid #ccc;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 💡 LOGIN SECTION REMOVED TEMPORARILY -->
+
+    <!-- ✅ Palmprint Capture Form -->
+    <div class="card" id="formSection">
+        <h2>Palmprint Capture</h2>
+        <input id="name" placeholder="Full Name" />
+        <input id="email" placeholder="Email" />
+        <input id="age" placeholder="Age" />
+        <select id="gender">
+            <option value="">Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+        </select>
+        <select id="hand">
+            <option value="">Select Hand</option>
+            <option value="Left">Left</option>
+            <option value="Right">Right</option>
+        </select>
+        <button id="captureBtn">Capture Palmprint</button>
+        <img id="preview" />
+    </div>
+
+    <script>
+        const preview = document.getElementById('preview');
+
+        document.getElementById('captureBtn').addEventListener('click', async () => {
+            const data = {
+                name: document.getElementById("name").value.trim(),
+                email: document.getElementById("email").value.trim(),
+                age: document.getElementById("age").value.trim(),
+                gender: document.getElementById("gender").value,
+                hand: document.getElementById("hand").value
+            };
+
+            if (!data.name || !data.email || !data.age || !data.gender || !data.hand) {
+                return alert("All fields are required");
+            }
+
+            try {
+                const result = await window.electronAPI.capturePalm(data);
+                if (result.success) {
+                    preview.src = "file://" + result.path;
+                    preview.style.display = "block";
+                    alert("Image captured and saved!");
+                } else {
+                    alert("Capture failed: " + result.error);
+                }
+            } catch (error) {
+                alert("Unexpected error: " + error.message);
+            }
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,27 @@
+# Node
+node_modules/
+dist/
+captures/
+*.log
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+env/
+venv/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Electron
+*.app
+*.deb
+*.AppImage
+*.snap
+
+# Misc
+palmprint_data.csv
+palmprint_dataset/
